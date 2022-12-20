@@ -16,7 +16,8 @@ import {
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useQueries, useMutation } from "react-query";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {setId} from "../redux/states/employeeIdSlice"
 import { getAll, deleteOne } from "../modules/employees/services";
 import useModal from "../hooks/useModal"
 import ModalCreateEmployee from "../components/ModalCreateEmployee";
@@ -42,6 +43,8 @@ function Admin() {
   const idSelected = useSelector((state) => state.employeeId.value.id);
   const currentEmployee = useSelector((state) => state.currentEmployee.value);
 
+  const dispatch = useDispatch();
+
   //queries
   const results = useQueries([
     {
@@ -58,9 +61,12 @@ function Admin() {
 
   const allEmployees = results[1];
 
+
+  //determinar el numero de paginas
   const numberPage =
     !allEmployees.isLoading && Math.ceil(allEmployees.data.length / 10);
 
+  //Estado de la popover
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -96,6 +102,7 @@ function Admin() {
     mutate(idSelected, {
       onSuccess: () => {
         refreshEmployees();
+        dispatch(setId({id:''}))
         handleClose();
       },
     });
@@ -134,11 +141,16 @@ function Admin() {
                   aria-describedby={open ? "simple-popover" : undefined}
                   variant="contained"
                   sx={{
-                    height: "45px",
-                    border: "1px solid #1571FF",
-                    borderRadius: "5px",
-                    color: "#1571FF",
-                    backgroundColor: "transparent",
+                    root:{
+                      height: "45px",
+                      border: "1px solid #1571FF",
+                      borderRadius: "5px",
+                      color: "#1571FF",
+                      backgroundColor: "#fff",
+                      "&.Mui-disabled" :{
+                        backgroundColor:'#000'
+                      }
+                    }
                   }}
                   onClick={handleClick}
                   disabled={idSelected === "" ? true : false}

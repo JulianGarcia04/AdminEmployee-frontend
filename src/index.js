@@ -5,7 +5,6 @@ import { QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import queryClientObject from "./query/reactQuery";
 import store from "./redux/store";
-import App from "./pages/App";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import Employee from "./pages/Employee";
