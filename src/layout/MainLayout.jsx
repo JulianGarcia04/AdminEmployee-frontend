@@ -17,7 +17,7 @@ function MainLayout({ children }) {
     onSuccess:(data)=>{
       dispatch(setEmployee(data))
       if (!data.role) {
-        navigate('/login');
+        navigate('/');
         return
       }
       if(data.role === 'employee'){

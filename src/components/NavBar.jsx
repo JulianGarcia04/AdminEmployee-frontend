@@ -15,7 +15,7 @@ function NavBar({ name, lastname, role }) {
   const logoutHandle = ()=>{
     mutate(null, {
       onSuccess:()=>{
-        navigate('/login');
+        navigate('/');
       }
     })
   }
