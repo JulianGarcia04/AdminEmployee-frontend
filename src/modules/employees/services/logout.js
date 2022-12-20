@@ -6,7 +6,7 @@ const logout = async()=>{
         const request = await Http.post(`${config.BASE_URL}/employee/logout`);
         return request.data
     } catch (error) {
-        throw error
+        throw error.response
     }
 }
 

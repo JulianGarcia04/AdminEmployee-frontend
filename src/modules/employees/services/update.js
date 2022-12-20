@@ -6,7 +6,7 @@ const update = async (data) =>{
         const request = await Http.put(`${config.BASE_URL}/employee/edit/${data.id}`, data.body);
         return request;
     } catch (error) {
-        throw error
+        throw error.response
     }
 }
 

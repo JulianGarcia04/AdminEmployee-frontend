@@ -6,7 +6,7 @@ const deleteOne = async (id)=>{
         const request = await Http.put(`${config.BASE_URL}/employee/delete/${id}`);
         return request;
     } catch (error) {
-        throw error;
+        throw error.response
     }
 }
 

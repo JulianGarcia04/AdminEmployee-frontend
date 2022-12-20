@@ -6,7 +6,7 @@ const getOne = async (id)=>{
         const request = await Http.get(`${config.BASE_URL}/employee/${id}`);
         return request.data;
     } catch (error) {
-        throw error;
+        throw error.response
     }
 }
 

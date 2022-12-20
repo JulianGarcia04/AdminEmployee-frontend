@@ -6,7 +6,7 @@ const create = async(data, token)=>{
         const request = await Http.post(`${config.BASE_URL}/employee/create`, data);
         return request;
     } catch (error) {
-        throw error
+        throw error.response
     }
 }
 

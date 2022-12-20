@@ -6,7 +6,7 @@ const login = async (data)=>{
         const request = await Http.post(`${config.BASE_URL}/employee/login`, data);
         return request;
     } catch (error) {
-        throw error;
+        throw error.response
     }
 }
 

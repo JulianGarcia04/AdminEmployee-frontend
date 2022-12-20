@@ -11,7 +11,7 @@ const getAll = async (limit, skip) => {
         : await Http.get(`${config.BASE_URL}/employee/all`);
     return request.data;
   } catch (error) {
-    throw error;
+    throw error.response
   }
 };
 

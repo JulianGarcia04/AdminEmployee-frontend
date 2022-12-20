@@ -16,11 +16,18 @@ import { useSelector } from "react-redux";
 import { editValidator } from "../modules/employees/validators";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { update, getOne } from "../modules/employees/services";
+import ErrorModal from "./ErrorModal";
+import useModal from "../hooks/useModal";
 
 function ModalEditEmployee({ isOpen, changeIsOpen }) {
+  //estados del modal de errores
+  const errorModal = useModal();
+  //me traigo el usuario con el que inicio sesion
   const idEmployee = useSelector((state) => state.employeeId.value.id);
+  //Me traigo los datos del empleado seleccionado
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(update);
+  //El hook para hacer las mutaciones
+  const { mutate, isLoading, isError, error } = useMutation(update);
   const query = useQuery(["oneEmployee"], () => getOne(idEmployee), {
     enabled: idEmployee !== "" ? true : false,
   });
@@ -57,6 +64,9 @@ function ModalEditEmployee({ isOpen, changeIsOpen }) {
             mutate(
               { id: idEmployee, body: values },
               {
+                onError: ()=>{
+                  errorModal.handleChange()
+                },
                 onSuccess: () => {
                   queryClient.invalidateQueries("employees");
                   changeIsOpen();
@@ -133,10 +143,7 @@ function ModalEditEmployee({ isOpen, changeIsOpen }) {
                         label="Employee State"
                         name="state"
                         control={
-                          <Checkbox
-                            name="state"
-                            checked={values.state}
-                          />
+                          <Checkbox name="state" checked={values.state} />
                         }
                         onChange={handleChange}
                       />
@@ -167,6 +174,13 @@ function ModalEditEmployee({ isOpen, changeIsOpen }) {
             </Stack>
           )}
         </Formik>
+        {isError && (
+          <ErrorModal
+            isOpen={errorModal.isOpen}
+            handleClose={errorModal.handleChange}
+            stack={error.data.stack}
+          />
+        )}
       </Box>
     </Modal>
   );

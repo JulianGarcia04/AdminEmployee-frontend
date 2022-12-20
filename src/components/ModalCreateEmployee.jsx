@@ -13,9 +13,13 @@ import { Formik, Form } from "formik";
 import { createValidator } from "../modules/employees/validators";
 import { useMutation, useQueryClient } from "react-query";
 import { create } from "../modules/employees/services";
+import ErrorModal from "./ErrorModal";
+import useModal from "../hooks/useModal";
 
 function ModalCreateEmployee({ isOpen, changeIsOpen }) {
-  const { mutate, isLoading } = useMutation(create);
+  const errorModal = useModal();
+
+  const { mutate, isLoading, isError, error } = useMutation(create);
   const queryClient = useQueryClient();
 
   return (
@@ -39,8 +43,11 @@ function ModalCreateEmployee({ isOpen, changeIsOpen }) {
           validationSchema={createValidator}
           onSubmit={(values) => {
             mutate(values, {
+              onError: () => {
+                errorModal.handleChange();
+              },
               onSuccess: () => {
-                queryClient.invalidateQueries('employees')
+                queryClient.invalidateQueries("employees");
                 changeIsOpen();
               },
             });
@@ -143,6 +150,13 @@ function ModalCreateEmployee({ isOpen, changeIsOpen }) {
             </Stack>
           )}
         </Formik>
+        {isError && (
+          <ErrorModal
+            isOpen={errorModal.isOpen}
+            handleClose={errorModal.handleChange}
+            stack={error.data.stack}
+          />
+        )}
       </Box>
     </Modal>
   );

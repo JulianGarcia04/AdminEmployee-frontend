@@ -14,26 +14,25 @@ import {
   Pagination,
   Stack,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useQueries, useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { getAll, deleteOne } from "../modules/employees/services";
+import useModal from "../hooks/useModal"
 import ModalCreateEmployee from "../components/ModalCreateEmployee";
 import EmployeeRow from "../components/EmployeeRow";
 import MainLayout from "../layout/MainLayout";
 import ModalEditEmployee from "../components/ModalEditEmployee";
 
 function Admin() {
-  const navigate = useNavigate();
 
   //estado del popover
   const [anchorEl, setAnchorEl] = useState(null);
   //estado del modal de crear
-  const [isOpenCreate, setIsOpenCreate] = useState(false);
+  const createModal = useModal();
 
   //estado del modal de editar
-  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const editModal = useModal();
 
   //estados referentes a la paginación
   const [currPage, setCurrPage] = useState(1);
@@ -85,13 +84,10 @@ function Admin() {
     setAnchorEl(null);
   };
 
-  //Eventos de modal de crear y editar
-  const handleModalCreate = () => {
-    setIsOpenCreate(!isOpenCreate);
-  };
+  //Eventos de modal de editar
 
   const handleModalEdit = () => {
-    setIsOpenEdit(!isOpenEdit);
+    editModal.handleChange()
     handleClose();
   };
 
@@ -184,7 +180,7 @@ function Admin() {
               </Box>
               {/*Modal de editar */}
               <ModalEditEmployee
-                isOpen={isOpenEdit}
+                isOpen={editModal.isOpen}
                 changeIsOpen={handleModalEdit}
               />
               <Button
@@ -194,14 +190,14 @@ function Admin() {
                   backgroundColor: "#1571FF",
                   height: "45px",
                 }}
-                onClick={handleModalCreate}
+                onClick={createModal.handleChange}
               >
                 Nuevo empleado
               </Button>
               {/*Modal de crear empleado*/}
               <ModalCreateEmployee
-                isOpen={isOpenCreate}
-                changeIsOpen={handleModalCreate}
+                isOpen={createModal.isOpen}
+                changeIsOpen={createModal.handleChange}
               />
             </Box>
           </Box>

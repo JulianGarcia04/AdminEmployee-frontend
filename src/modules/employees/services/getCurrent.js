@@ -6,7 +6,7 @@ const getCurrent = async (token)=>{
        const request = await Http.get(`${config.BASE_URL}/employee/current`);
        return request.data 
     } catch (error) {
-        throw error;
+        throw error.response
     }
 }
 
