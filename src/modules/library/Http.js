@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+axios.defaults.withCredentials = true
+
 class Http {
     async get(uri, config={}){
         try {
